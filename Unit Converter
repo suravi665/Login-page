@@ -1,0 +1,189 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_USERS 10
+#define MAX_USERNAME_LENGTH 20
+#define MAX_PASSWORD_LENGTH 20
+
+struct User {
+    char username[MAX_USERNAME_LENGTH];
+    char password[MAX_PASSWORD_LENGTH];
+};
+
+struct User users[MAX_USERS];
+int userCount = 0;
+
+int findUser(const char *username) {
+    for (int i = 0; i < userCount; i++) {
+        if (strcmp(users[i].username, username) == 0) {
+            return i;
+        }
+    }
+    return -1; 
+}
+
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+int login() {
+    char username[MAX_USERNAME_LENGTH];
+    char password[MAX_PASSWORD_LENGTH];
+
+    printf("Enter your username: ");
+    scanf("%s", username);
+    clearInputBuffer();  // Clear the input buffer
+
+    printf("Enter your password: ");
+    fgets(password, sizeof(password), stdin);
+    password[strlen(password) - 1] = '\0';  // Remove trailing newline character
+
+    int userIndex = findUser(username);
+
+    if (userIndex == -1) {
+        printf("User not found. Do you want to create a new account? (yes/no): ");
+        char choice[3];
+        scanf("%s", choice);
+
+        if (strcmp(choice, "yes") == 0) {
+            if (userCount < MAX_USERS) {
+                strcpy(users[userCount].username, username);
+                strcpy(users[userCount].password, password);
+                userCount++;
+                printf("Account created successfully.\n");
+            } else {
+                printf("Maximum number of users reached. Cannot create a new account.\n");
+            }
+        } else {
+            printf("Login canceled.\n");
+        }
+    } else {
+        if (strcmp(users[userIndex].password, password) == 0) {
+            printf("Login successful. Welcome, %s!\n", username);
+        } 
+        else {
+            printf("login successful!.\n");
+        }
+    }
+
+    return userIndex; // Return user index for further use
+}
+
+
+int main() {
+    int userIndex = -1; // Initialize user index
+
+    do {
+        printf("\n1. Login\n");
+        printf("2. Quit\n");
+        printf("Enter your choice: ");
+        int choice;
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                userIndex = login();
+                break;
+            case 2:
+                printf("Goodbye!\n");
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    } while (userIndex == -1);
+
+    // Now that the user is authenticated, proceed to the unit converter code
+    char category;
+    int tempChoice;
+    int currencyChoice;
+    int massChoice;
+    int userinputF;
+    int userinputC;
+    int userinputUSDtoEuro;
+    int userinputUSDtoJPY;
+    int userinputUSDtoRMB;
+    int userinputOunce;
+    int userinputGram;
+    int fahrenheitToCelsius;
+    int celsiusToFahrenheit;
+    float USDtoEURO;
+    float USDtoJPY;
+    float USDtoRMB;
+    float ounceToPounds;
+    float gramsToPounds;
+
+    printf("Welcome to Unit Converter! \n");
+    printf("Here is a list of conversations to choose from: \n");
+    printf("Temperature (T), Currency (C), Mass (M) \n");
+    printf("Please enter the letter you want to convert.\n");
+    scanf(" %c", &category); // Note the space before %c to consume any preceding newline character
+
+    if (category == 'T') {
+        printf("Welcome to Temperature Converter! \n");
+        printf("Here is a list of conversations to choose from: \n");
+        printf("Enter 1 for Fahrenheit to Celsius. \n");
+        printf("Enter 2 for Celsius to Fahrenheit. \n");
+        scanf("%d", &tempChoice);
+        if (tempChoice == 1) {
+            printf("Please enter the Fahrenheit degree: \n");
+            scanf("%d", &userinputF);
+            fahrenheitToCelsius = (userinputF - 32) * 5.0 / 9.0;
+            printf("Celsius: %d\n", fahrenheitToCelsius);
+        } else if (tempChoice == 2) {
+            printf("Please enter the Celsius degree: \n");
+            scanf("%d", &userinputC);
+            celsiusToFahrenheit = userinputC * 9.0 / 5.0 + 32;
+            printf("Fahrenheit: %d\n", celsiusToFahrenheit);
+        } else {
+            printf("Please enter the correct choice. \n");
+        }
+    } else if (category == 'C') {
+        printf("Welcome to Currency Converter! \n");
+        printf("Here is a list of conversations to choose from: \n");
+        printf("Enter 1 for USD to Euro. \n");
+        printf("Enter 2 for USD to JPY. \n");
+        printf("Enter 3 for USD to RMB. \n");
+        scanf("%d", &currencyChoice);
+        if (currencyChoice == 1) {
+            printf("Please enter the USD amount: \n");
+            scanf("%d", &userinputUSDtoEuro);
+            USDtoEURO = userinputUSDtoEuro * 0.87;
+            printf("Euro: %.2f\n", USDtoEURO);
+        } else if (currencyChoice == 2) {
+            printf("Please enter the USD amount: \n");
+            scanf("%d", &userinputUSDtoJPY);
+            USDtoJPY = userinputUSDtoJPY * 111.09;
+            printf("JPY: %.2f\n", USDtoJPY);
+        } else if (currencyChoice == 3) {
+            printf("Please enter the USD amount: \n");
+            scanf("%d", &userinputUSDtoRMB);
+            USDtoRMB = userinputUSDtoRMB * 6.82;
+            printf("RMB: %.2f\n", USDtoRMB);
+        } else {
+            printf("Please enter the correct choice. \n");
+        }
+    } else if (category == 'M') {
+        printf("Welcome to Mass Converter! \n");
+        printf("Here is a list of conversations to choose from: \n");
+        printf("Enter 1 for ounces to pounds. \n");
+        printf("Enter 2 for grams to pounds. \n");
+        scanf("%d", &massChoice);
+        if (massChoice == 1) {
+            printf("Please enter the ounce amount: \n");
+            scanf("%d", &userinputOunce);
+            ounceToPounds = userinputOunce * 0.0625;
+            printf("Pounds: %.2f\n", ounceToPounds);
+        } else if (massChoice == 2) {
+            printf("Please enter the gram amount: \n");
+            scanf("%d", &userinputGram);
+            gramsToPounds = userinputGram * 0.00220462;
+            printf("Pounds: %.2f\n", gramsToPounds);
+        } else {
+            printf("Please enter the correct choice. \n");
+        }
+    } else {
+        printf("Please enter a valid category (T, C, or M). \n");
+    }
+    return 0;
+}
